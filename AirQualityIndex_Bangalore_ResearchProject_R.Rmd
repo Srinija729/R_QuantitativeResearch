@@ -1,0 +1,476 @@
+---
+title: 'Air Quality Index: Bangalore'
+author: "Srinija Ghantasala"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## INTRODUCTION
+
+
+<font size="4"> **Abstract**</font> 
+ 
+<font size="2"> Air Quality Index (AQI) is a tool to measure how polluted the air is currently or to estimate how polluted the air can become. Concentrations of various pollutants in the air are used to calculate the air quality index of that area. Awareness of daily levels of air pollution is important to the citizens of a country, especially for those who suffer from illnesses caused due to air pollution. Air quality standards are the basic foundation that provides legal frameworks for air pollution control. The basis of development of standards is to provide a rationale for protecting public health from adverse effects of air pollutants, to eliminate or reduce exposure to hazardous air pollutants, and to guide national/ local authorities for pollution control decisions. Currently, 23 parameters are used to measure the quality of air by the government of India. Of these parameters, pollutants/parameters of major public health concerns currently include particulate matter, carbon monoxide, ozone, nitrogen dioxide, and sulfur dioxide. 
+ 
+The National Air Quality Index (AQI) was launched in India in September 2014, under the Swachh Bharat Abhiyan. The Central Pollution Control Board (CPCB) along with State Pollution Control Boards (SPCB) have been operating National Air Monitoring Program (NAMP) covering 240 cities of the country having more than 342 monitoring stations. The AQI for India has 6 categories. They are:
+
+1.	Good - Minimal impact
+2.	Satisfactory - Minor breathing discomfort to sensitive people
+3.	Polluted - Breathing discomfort to the people with lungs, asthma and heart diseases
+4.	Poor - Breathing discomfort to most people on prolonged exposure
+5.	Very poor - Respiratory illness on prolonged exposure
+6.  Severe - Affects healthy people and seriously impacts those with existing diseases</font> 
+
+
+
+<font size="4"> **Aim**</font> 
+
+<font size="2">Through this project, I aim to look at the Air Quality Index of the Indian city of Bangalore through parameters such as particulate matter, carbon monoxide, sulphur dioxide, etc. I aim to look at the patterns in measurements of concentrations of these pollutants in the air over the years. </font> 
+
+<font size="4"> **Intent**</font> 
+
+<font size="2">When I was researching about topics related to pollution, I have come across the term “Air Quality Index”. I have researched about it in order to understand what it means. After reading up about it, I have realised that air pollution in itself has numerous variables involved. I initially started to look for the factors/ contributors to air pollution, but soon, I have changed my direction of research and started looking up at the various components of air pollution. 
+
+Through this project, I intend to look at the constituents of air pollution. In order to tackle a problem, one must look beyond the causes to know till what extent the damage is. Likewise, in this case, in order to understand better and work on solutions for air pollution, one must also look at how it has affected the environment rather than what is causing it. Another important aspect of this topic is the impact of air pollution on humans. The parameters set for Air Quality Index Check are based on the effects on humans.
+
+What made me choose this topic for my project is mainly because I wanted to look at and work with more quantitative research and data as the primary focus. Since I already had a basic understanding about the topic due to my preliminary research, I decided to work with it. Another important factor that led me to pick this topic is the daily news that I read about the “horrible” living conditions in metropolitan cities. The news is about air pollution and its adverse effects on human health. So, I decided to look at what is it that is harmful in the air, i.e., what are the harmful components and their concentration that are polluting the air.
+</font>
+
+
+## RESEARCH
+
+<font size="4"> **Research protocol**</font> 
+
+<font size="2">In order to look at the AQI for Bangalore, I started by researching about the process of data collection for the values of air quality. For this, I have visited the sites of the Central Pollution Control Board (CPCB) and Karnataka State Pollution Control Board (KSPCB). I have learnt that there are multiple locations within each city from which the data for calculating AQI is collected. For Bangalore city, there are 5 main AQI data collection points.
+
+</font>
+
+<font size="2">The research protocol I have followed for this project:
+
+1. Broad questions:
+      -	Define “what is AQI”
+    -	What is air pollution and how is AQI related to it?
+    -	Study the impacts of various factors/ contributors for air pollution.
+    -	What are the factors considered to calculate AQI?
+    -	What are the quantitative measures of each factor/ contributor of air pollution for calculating AQI?
+    -	Identify the various parameters.
+    -	Which locations?
+    
+2. Parameters:
+    -	Day, date, time of recording values
+    -	Area, location – different sectors
+    -	Pollutant name, type
+    -	Measurement of quantity
+    -	Units of the measured quantity
+    -	Standard/ approved quantity
+
+3. Protocol:
+    -	Collect datasets from reliable sources
+    -	Maintain granularity in data throughout.
+    -	Verify data/ check credibility, etc.
+    -	If one source is citing a government/ reliable website as their data source, then collect the data from the government website.
+    -	Go through data and sort out discrepancies
+    -	Look out for missing data entries or gaps in data
+    - Once all required datasets are found, collect them and bring them together</font>
+
+
+
+<font size="4"> **Research for this project**</font> 
+
+<font size="2">For this project, I have collected data on the concentrations of 6 pollutants in each of the locations. 
+
+1. Locations:
+
+    - Peenya - industrial area (PEENYA)
+    - Central Railway Station (CRS)
+    - Bangalore Water Supply and Sewage Board Office (BWSSB)
+    - Byrasandra Tavarekere Madiwala layout - residential area (BTM)
+    - Saneguravahalli (SGHALLI)
+
+2. Pollutants:
+
+    - Particulate matter (PM2.5, PM10) measured in ug/m3
+    - Sulphur dioxide (SO2) measured in ug/m3
+    - Carbon monoxide (CO) measured in mg/m3
+    - Oxides of nitrogen (NOX) measured in ppb
+    - Nitrogen monoxide (NO) measured in ug/m3
+    - Nitrogen dioxide (NO2) measured in ug/m3
+
+3. Years: 2018, 2019
+4. Granularity: daily (values of daily average calculated at the end of every day)
+</font>
+
+
+
+## ANALYSIS AND CONCLUSIONS
+
+<font size="3"> **Importing the required csv files**</font> 
+```{r read csv, echo=TRUE, warning=FALSE}
+# read the csv file and store it as blr_data
+blr_data = read.csv("blr_final.csv", stringsAsFactors = FALSE) 
+
+# read the csv file on latitudes and longitudes and store it as lat_lon
+lat_lon = read.csv("lat_lon_blr.csv", stringsAsFactors = FALSE) 
+
+#changing the variable type for the data
+library(readr)
+blr_final <- read_csv("blr_final.csv", col_types = cols(concentration = col_number(), 
+    obv_date = col_date(format = "%d-%m-%Y")))
+blr_data = blr_final  
+```
+
+<font size="3"> **Importing the required packages**</font>
+```{r libraries, warning=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+library(tidyverse)
+library(lubridate)
+library(ggmap)
+library(wesanderson)
+require(maps)
+```
+
+<font size="3"> **Importing the required packages**</font>
+```{r about tables, echo=TRUE, warning=FALSE}
+dim(blr_data)
+str(blr_data)
+
+table(blr_data$parameter)
+table(blr_data$location)
+table(blr_data$obv_month)
+
+summary(blr_data)
+```
+
+<font size="3"> **modifying the bangalore data table**</font>
+```{r}
+# adding some columns to the table
+variable_from_date <- as.Date(blr_data$obv_date,'%m/%d/%Y')
+
+# extracting day, month, year from the date column
+years_from_date <- as.numeric(format(variable_from_date,'%Y'))
+months_from_date <- month(blr_data$obv_date, label = TRUE, abbr = TRUE)
+days_from_date <- as.numeric(format(variable_from_date,'%d'))
+
+# adding the extracted day, month, year from the date column as individual columns
+blr_data$observed_year <- years_from_date
+blr_data$observed_month <- months_from_date
+blr_data$observed_days <- days_from_date
+
+
+# converting all values to lower case
+blr_data$location = str_to_lower(blr_data$location)
+blr_data$parameter = str_to_lower(blr_data$parameter)
+blr_data$observed_month = str_to_lower(blr_data$observed_month)
+
+
+#converting values of months as suitable to plot a graph
+months_order <- c("jan", "feb", "mar",   
+                 "apr", "may", "jun",   
+                 "jul", "aug", "sep",   
+                 "oct", "nov", "dec")
+blr_data$months_in_order <-  factor(blr_data$observed_month,  levels = months_order)
+```
+
+<font size="4"> **PLOTTING GRAPHS**</font>
+
+<font size="2"> To begin with, let us look at the location of the AQI data collection locations in Bangalore</font>
+```{r}
+latitude_val <- c(12.9,13.05)
+longitude_val <- c(77.52,77.7)
+bbox <- make_bbox(longitude_val,latitude_val)
+b <- get_map(bbox,maptype="toner",source="stamen", color = "bw")
+
+ggmap(b) + 
+  geom_point(data = lat_lon,
+             aes(lon,lat, color = location),
+             size = 4) +
+  scale_color_manual(values = c("darkred", 
+                                "blue", 
+                                "darkgreen", 
+                                "orange", 
+                                "magenta")) +
+  labs(x = "Longitude", y = "Latitude",
+       title="Location of the AQI data collection points", color = "Locations")
+```
+
+
+<font size="2"> Let us now look at the graphs for individual parameters</font>
+```{r warning=FALSE}
+# graph 1.1: Sulphur dioxide concentration in Bangalore in year 2018
+ggplot((filter(blr_data,
+               parameter == "so2",
+               observed_year == "2018")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Sulphur dioxide (SO2) concentration in Bangalore in year 2018", 
+       x = "Day of observation",
+       y = "Log(concentration of SO2 in ug/m3)")  
+```
+
+```{r warning=FALSE}
+# graph 2.1: Sulphur dioxide concentration in Bangalore in year 2019
+ggplot((filter(blr_data,
+               parameter == "so2",
+               observed_year == "2019")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Sulphur dioxide (SO2) concentration in Bangalore in year 2019", 
+       x = "Day of observation",
+       y = "Log(concentration of SO2 in ug/m3)") 
+```
+
+```{r warning=FALSE}
+# graph 1.2: Nitrogen dioxide concentration in Bangalore in year 2018
+ggplot((filter(blr_data,
+               parameter == "no2",
+               observed_year == "2018")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Nitrogen dioxide (NO2) concentration in Bangalore in year 2018", 
+       x = "Day of observation",
+       y = "Log(concentration of NO2 in ug/m3)")  
+```
+
+```{r warning=FALSE}
+# graph 2.2: Nitrogen dioxide concentration in Bangalore in year 2019
+ggplot((filter(blr_data,
+               parameter == "no2",
+               observed_year == "2019")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Nitrogen dioxide (NO2) concentration in Bangalore in year 2019", 
+       x = "Day of observation",
+       y = "Log(concentration of NO2 in ug/m3)")  
+```
+
+```{r warning=FALSE}
+# graph 1.3: Carbon monoxide concentration in Bangalore in year 2018
+ggplot((filter(blr_data,
+               parameter == "co",
+               observed_year == "2018")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Carbon monoxide (CO) concentration in Bangalore in year 2018", 
+       x = "Day of observation",
+       y = "Log(concentration of CO in mg/m3)")  
+```
+
+```{r warning=FALSE}
+# graph 2.3: Carbon monoxide concentration in Bangalore in year 2019
+ggplot((filter(blr_data,
+               parameter == "co",
+               observed_year == "2019")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Carbon monoxide (CO) concentration in Bangalore in year 2019", 
+       x = "Day of observation",
+       y = "Log(concentration of CO in mg/m3)") 
+```
+
+```{r warning=FALSE}
+# graph 1.4: Particulate matter concentration in Bangalore in year 2018
+ggplot((filter(blr_data,
+               parameter %in% c("pm10", "pm2.5"),
+               observed_year == "2018")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Particulate matter concentration in Bangalore in year 2018", 
+       x = "Day of observation",
+       y = "Log(concentration of PM in ug/m3)")  
+```
+
+```{r warning=FALSE}
+# graph 2.4: Particulate matter concentration in Bangalore in year 2019
+ggplot((filter(blr_data,
+               parameter %in% c("pm10", "pm2.5"),
+               observed_year == "2019")),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 0.5) + 
+  facet_wrap(~months_in_order) + 
+  labs(title = "Particulate matter concentration in Bangalore in year 2019", 
+       x = "Day of observation",
+       y = "Log(concentration of PM in ug/m3)")  
+```
+
+<font size="2"> If we look at these graphs, we can see that there are some abnormal spikes in values on random days for all parameters. Let us take a closer look at the month of December to get a detailed look</font>
+```{r warning=FALSE}
+# graph 3.1: Sulphur dioxide concentration in Bangalore in December 2018, 2019
+ggplot((filter(blr_data,
+               parameter == "so2",
+               observed_month == "dec",)),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 1) +  
+  geom_line(aes(color = location)) +
+  facet_wrap(~observed_year) +
+  labs(title = "Sulphur dioxide (SO2) concentration in Bangalore in December", 
+       x = "Day of observation",
+       y = "Log(concentration of SO2 in ug/m3)") 
+```
+
+```{r warning=FALSE}
+# graph 3.2: Particulate matter concentration in Bangalore in December 2018, 2019
+ggplot((filter(blr_data,
+               parameter %in% c("pm10", "pm2.5"),
+               observed_month == "dec",)),
+       aes(x = observed_days, y = log(concentration))) + 
+  geom_point(aes(color = location), size = 1) +  
+  geom_line(aes(color = location)) +
+  facet_wrap(~observed_year) +
+  labs(title = "Particulate matter (PM) concentration in Bangalore in December", 
+       x = "Day of observation",
+       y = "Log(concentration of PM in ug/m3)") 
+```
+
+<font size="2"> Let us look at the graphs for the yearly values for each individual parameter </font>
+```{r warning=FALSE}
+# graph for locations vs the so2 concentrations
+(filter(blr_data, 
+                   parameter == "so2")) %>% 
+  mutate(Category = ifelse(concentration <= 40, 
+                        "<= 40 - good", "41-80 - satisfactory")) %>%
+  ggplot(aes(x = obv_date, y= concentration, color = Category)) +
+  geom_point(size = 0.5) + 
+  geom_line() +
+  facet_wrap(~location) +
+  scale_color_manual(values = c("lightblue", "darkblue")) +
+  labs(title = "Sulphur dioxide (SO2) concentration in Bangalore Jan, 2018 - Dec, 2019", 
+       x = "Day of observation",
+       y = "Cconcentration of PM in ug/m3") 
+  
+# graph for peenya vs the so2 concentrations
+(filter(blr_data, 
+        parameter == "so2",
+        location == "peenya")) %>% 
+  mutate(Category = ifelse(concentration <= 40, 
+                        "<= 40 - good", "41-80 - satisfactory")) %>%
+  ggplot(aes(x = obv_date, y= concentration, color = Category)) +
+  geom_point(size = 0.5) + 
+  geom_line() +
+  scale_color_manual(values = c("lightblue", "darkblue")) +
+  labs(title = "Sulphur dioxide (SO2) concentration in Bangalore Jan, 2018 - Dec, 2019", 
+       x = "Day of observation",
+       y = "Cconcentration of PM in ug/m3") 
+```
+
+<font size="2"> If we look at the above graphs, we can see the individual parameter measurements over the two years for all locations in Bangalore. In each of the maps, we can see that the values are mostly within the prescribed concentration of 40 ug/m3 of SO2, with a very few exceptions crossing that limit. Now let us try looking at this same data in a different manner. </font>
+
+
+```{r}
+pal <- wes_palette("Zissou1", 5, type = "discrete")
+
+# graph for month vs the concentration of so2 in peenya
+ggplot((filter(blr_data,
+               parameter == "so2",
+               location == "peenya")), 
+       aes(x = observed_days, y = months_in_order,
+               fill = concentration)) +
+  geom_tile() + 
+  scale_fill_gradientn(colours = pal) + 
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) + 
+  coord_equal() + 
+  facet_wrap(~observed_year, ncol = 1) +
+  geom_text(aes(label=concentration), na.rm = T, size = 1, check_overlap = T) +
+  labs(title = "Sulphur dioxide (SO2) concentration in Peenya", 
+       y = "month",
+       x = "Days of the month") 
+
+# graph for month vs the concentration of pm in peenya
+ggplot((filter(blr_data,
+               parameter %in% c("pm10", "pm2.5"),
+               location == "peenya")), 
+       aes(x = observed_days, y = months_in_order,
+               fill = concentration)) +
+  geom_tile() + 
+  scale_fill_gradientn(colours = pal) + 
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) + 
+  coord_equal() + 
+  facet_wrap(~observed_year, ncol = 1) +
+  geom_text(aes(label=concentration), na.rm = T, size = 1, check_overlap = T) +
+  labs(title = "Particulate matter (PM) concentration in Peenya", 
+       y = "month",
+       x = "Days of the month")
+
+# graph for month vs the concentration of no2 in peenya
+ggplot((filter(blr_data,
+               parameter == "no2",
+               location == "peenya")), 
+       aes(x = observed_days, y = months_in_order,
+               fill = concentration)) +
+  geom_tile() + 
+  scale_fill_gradientn(colours = pal) + 
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) + 
+  coord_equal() + 
+  facet_wrap(~observed_year, ncol = 1) +
+  geom_text(aes(label=concentration), na.rm = T, size = 1, check_overlap = T) +
+  labs(title = "Nitrogen dioxide (NO2) concentration in Peenya", 
+       y = "month",
+       x = "Days of the month") 
+
+# graph for month vs the concentration of co in peenya
+ggplot((filter(blr_data,
+               parameter == "co",
+               location == "peenya")), 
+       aes(x = observed_days, y = months_in_order,
+               fill = concentration)) +
+  geom_tile() + 
+  scale_fill_gradientn(colours = pal) + 
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) + 
+  coord_equal() + 
+  facet_wrap(~observed_year, ncol = 1) +
+  geom_text(aes(label=concentration), na.rm = T, size = 1, check_overlap = T) +
+  labs(title = "Carbon monoxide (CO) concentration in Peenya", 
+       y = "month",
+       x = "Days of the month") 
+
+```
+
+<font size="2"> From all the above graphs, when I look at them, the first thing that I notice are the abnormalities. After analysing all these graphs and the data, I have arrived at some questions.
+Why are the measurements on one day randomly so high? Is it random? What are the reasons behind such a spike? Do festival-events such as Diwali, which contribute a lot to air pollution, cause such a spike at random? Does the outside weather play any significant role in the mesurements? For example, during winters, we observe a higher pollution rate than we do in summers. 
+
+Another important observation that I have made from this analysis is that the location at which the reading are taken also plays a significant/an important role in determining the AQI of that location. For example, Peenya, an industrial area has a higher AQI than a residential area such as BTM or BWSSB.
+
+For me , this research project has been a great challenge and equally a great opportunity. This research project can be used as the base to explore numerous other factors related to pollution and air pollution. The observations and inferences from this project led me to several other questions which can be answered by further research and extensive understanding of the topic of Air Quality Index.
+
+In the future, with the current dataset, One can explore the possibilities of co-relations amongst the data. Another suggestion to move forward is to use data from other cities and compare city-wise data over the years. This way, we can gain a deeper understabding about AQI. Further, datasets on aspects such as pollution levels due to events (festivals) can be collected and used for co-relating and comparing. Also, datasets on the efforts to fight air pollution can be taken and used for co-relating - are the efforts really paying off? If datasets for all many years is collected, it can be used to build a model for prediction of future AQI. These are some of the pathways that can be explored if chosen to expand on this topic.
+</font>
+
+
+## REFERENCES AND BIBLIOGRAPHY
+
+
+<font size="2">
+
+1. Central Pollution Control Board - real-time AQI monitoring [https://cpcb.nic.in/air-pollution/]
+2. Central Pollution Control Board - Average AQI report criteria [https://app.cpcbccr.com/ccr/#/caaqm-dashboard-all/caaqm-landing/data]
+3. About AQI - CPCB [https://app.cpcbccr.com/ccr_docs/About_AQI.pdf]
+4. How AQI is calculated - CPCB [https://app.cpcbccr.com/ccr_docs/How_AQI_Calculated.pdf]
+5. Air Quality Standards - CPCB [https://app.cpcbccr.com/ccr_docs/Air_quality_standards.pdf]
+6. Central Pollution Control Board - Average AQI report criteria [http://www.cpcb.gov.in/CAAQM/frmUserAvgReportCriteria.aspx]
+7. Air Quality Historical Data Platform [https://aqicn.org/data-platform/register/]
+8. Latitude and Longitude data [https://www.latlong.net/]
+9. Worldbank search [http://search.worldbank.org/all?qterm=air+quality+index&language=EN&op=]
+10. Article - 1[https://bangaloremirror.indiatimes.com/bangalore/cover-story/you-think-delhi-is-polluted-bengalurus-pollution-levels-will-leave-you-breathless/articleshow/69065577.cms]
+11. Article - 2[https://www.livemint.com/news/india/bengaluru-s-air-quality-sparks-debate-between-pollution-control-board-experts-11574573825814.html]
+12. Article - 3[https://timesofindia.indiatimes.com/city/bengaluru/pollution-news]
